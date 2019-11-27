@@ -1,0 +1,3 @@
+class AccountInfo{
+  String userName;
+}

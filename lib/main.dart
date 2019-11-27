@@ -1,18 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:shoe_store/account_page.dart';
 import 'package:shoe_store/home_page.dart';
+import 'package:shoe_store/item_detail_page.dart';
 import 'package:shoe_store/payment_page.dart';
+import 'package:shoe_store/search_page.dart';
+import 'package:shoe_store/search_result_page.dart';
+import 'package:shoe_store/shop_item.dart';
 
 void main() => runApp(MyApp());
+
+List<ShopItem> allItems = List<ShopItem>();
 
 // Routes
 const String homePage = '/';
 const String paymentPage = '/paymentPage';
+const String searchPage = '/searchPage';
+const String searchResultPage = '/searchResultPage';
+const String accountPage = '/accountPage';
+const String itemDetailPage = '/itemDetailPage';
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        onGenerateRoute: _routes(), title: 'Home');
+      onGenerateRoute: _routes(),
+      title: 'Home',
+      theme: ThemeData(
+          textTheme: TextTheme(button: TextStyle(color: Colors.black54))),
+    );
   }
 
   RouteFactory _routes() {
@@ -23,8 +38,20 @@ class MyApp extends StatelessWidget {
         case homePage:
           screen = HomePage();
           break;
-          case paymentPage:
+        case paymentPage:
           screen = PaymentPage();
+          break;
+        case searchPage:
+          screen = SearchPage();
+          break;
+        case itemDetailPage:
+          screen = ItemDetailPage(item: arg["item"]);
+          break;
+        case searchResultPage:
+          screen = SearchResultPage();
+          break;
+        case accountPage:
+          screen = AccountPage();
           break;
         default:
           return null;
