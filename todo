@@ -1,0 +1,23 @@
+账户
+    -收藏
+    -修改密码*
+    -购物车
+
+主页
+    -推荐-物品列表
+    -上滑菜单-购物车
+    -搜索
+
+物品页(详情页)
+    -物品大图
+    -物品价格
+    -标题
+    -加入购物车/收藏
+    
+database
+    -user_name
+    -faverite_items
+    -cart_items
+    -hashed_password
+    -add_cart
+    -remove_cart
