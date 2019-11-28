@@ -15,6 +15,8 @@ class _SearchPageState extends State<SearchPage> {
   List<String> searchResult = new List<String>();
   final _onTextChanged = PublishSubject<String>();
 
+  String searchTerm="";
+
   @override
   void initState() {
     super.initState();
@@ -24,6 +26,14 @@ class _SearchPageState extends State<SearchPage> {
         .throttleTime(Duration(milliseconds: 500))
         .where((x) => x != "")
         .switchMap<List<String>>((mapper) => _search(mapper));
+
+        _onTextChanged
+        .distinct()
+        .throttleTime(Duration(milliseconds: 500))
+        .where((x) => x != "")
+        .listen((x){
+          searchTerm=x;
+        });
 
     _onTextChanged
         .distinct()
@@ -66,16 +76,20 @@ class _SearchPageState extends State<SearchPage> {
           return ListTile(
             leading: Text(text),
             onTap: () {
-              _onTextChanged.add(text);
-              Navigator.pushNamed(context, searchResultPage);
+              Navigator.pushNamed(context, searchResultPage,
+                  arguments: {"searchTerm": text});
             },
           );
         },
-        trailing: CircleAvatar(
-          child: Text("RD"),
-        ),
         onChanged: _onTextChanged.add,
         onTap: () {},
+        trailing: IconButton(
+          icon: Icon(Icons.search),
+          onPressed: () {
+            Navigator.pushNamed(context, searchResultPage,
+                arguments: {"searchTerm": searchTerm});
+          },
+        ),
         decoration: InputDecoration.collapsed(
           hintText: "Search...",
         ),

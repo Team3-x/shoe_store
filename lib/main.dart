@@ -19,9 +19,11 @@ const String searchResultPage = '/searchResultPage';
 const String accountPage = '/accountPage';
 const String itemDetailPage = '/itemDetailPage';
 
+BuildContext buildContext;
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    buildContext=context;
     return MaterialApp(
       onGenerateRoute: _routes(),
       title: 'Home',
@@ -48,7 +50,7 @@ class MyApp extends StatelessWidget {
           screen = ItemDetailPage(item: arg["item"]);
           break;
         case searchResultPage:
-          screen = SearchResultPage();
+          screen = SearchResultPage(searchterm: arg["searchTerm"],);
           break;
         case accountPage:
           screen = AccountPage();

@@ -4,7 +4,7 @@
     -购物车
 
 主页
-    -推荐-物品列表
+    -推荐-物品列表*
     -上滑菜单-购物车
     -搜索
 
@@ -14,9 +14,9 @@
     -标题
     -加入购物车/收藏
     
-database
+database*
     -user_name
-    -faverite_items
+    -favourite_items
     -cart_items
     -hashed_password
     -add_cart

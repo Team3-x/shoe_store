@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:shoe_store/account_page.dart';
+import 'package:shoe_store/dao.dart';
+import 'package:shoe_store/models/account_info.dart';
 import 'package:shoe_store/shop_item.dart';
 import 'main.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
+
+DAO dao;
+AccountInfo accountInfo; //=AccountInfo(id: 1,userName: "Tom");
 
 class HomePage extends StatefulWidget {
   @override
@@ -13,13 +19,21 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
+    dao = new DAO();
     loadAsset().then((x) {
       List itemJson = json.decode(x);
       var r = itemJson.map((m) => ShopItem.fromJson(m)).toList();
       setState(() {
         allItems = r;
       });
+    });
+
+    Future.delayed(Duration(seconds: 1)).then((x) {
+    dao.createDatabase();
+    });
+
+    Future.delayed(Duration(seconds: 2)).then((x) {
+      accountInfo = new AccountInfo(password: "daw", userName: "Cat");
     });
   }
 
@@ -72,8 +86,25 @@ class _HomePageState extends State<HomePage> {
                   _buildDrawerButton((() {
                     Navigator.pushNamed(context, accountPage);
                   }), "Account"),
-                  _buildDrawerButton((() {}), "Faverite"),
+                  _buildDrawerButton((() {}), "favourite"),
                   _buildDrawerButton((() {}), "Cart"),
+                  _spliter("Database"),
+                  _buildDrawerButton((() {
+                    dao.createDatabase();
+                  }), "DB Create"),
+                  _buildDrawerButton((() {
+                    accountInfo =
+                        new AccountInfo(password: "daw", userName: "Cat");
+                    dao.addNewUser(accountInfo);
+                  }), "DB Add"),
+                  _buildDrawerButton((() {
+                    dao.getFirstUser();
+                    //updateState();
+                  }), "DB getFirstUser"),
+                  _buildDrawerButton((() {
+                    accountInfo.favourite = "a3";
+                    dao.updateUser(accountInfo);
+                  }), "DB AddFav"),
                 ],
               ),
               _spliter("16070021"),
@@ -82,13 +113,14 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: Container(
+        margin: EdgeInsets.only(top: 10),
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Wrap(
               spacing: 10,
               runSpacing: 10,
-              children: <Widget>[]..addAll(_buildItems(width-30)),
+              children: <Widget>[]..addAll(_buildItems(width - 30)),
             ),
           ),
         ),
@@ -110,6 +142,7 @@ class _HomePageState extends State<HomePage> {
             fit: FlexFit.tight,
             child: Container(
               height: 0.5,
+              alignment: Alignment.center,
               margin: EdgeInsets.only(left: 10),
               decoration: BoxDecoration(
                 color: Colors.black45,
@@ -152,7 +185,6 @@ class _HomePageState extends State<HomePage> {
         r.add(postWidget(context, x, width / 2));
       });
     }
-    print("Length:${r.length}");
     return r;
   }
 }
@@ -166,7 +198,7 @@ Widget postWidget(BuildContext context, ShopItem item, double width) {
         decoration: BoxDecoration(
           borderRadius: BorderRadiusDirectional.circular(20),
         ),
-        height: 300,
+        height: 250,
         width: width,
         child: Image(
           image: AssetImage("assets/images/${item.id}.jpg"),
